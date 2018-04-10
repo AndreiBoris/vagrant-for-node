@@ -74,17 +74,13 @@ Vagrant.configure(2) do |config|
     echo "Installing Git..."
     sudo apt-get install git -y > /dev/null
 
-    echo "Installing Node and NVM..."
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-    source ~/.nvm/nvm.sh
-    nvm install node
-    nvm alias default node
+    echo "Installing Node and NMM..."
+    sudo apt-get install nodejs -y
+    sudo apt-get install npm -y
 
     echo "Installing Oh My Zsh..."
     sudo apt-get install -y zsh
     wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh 
-    sudo chsh -s /bin/zsh vagrant
-    zsh
 
     echo "Changing default Oh My Zsh theme to new theme..."
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="flazz"/g' ~/.zshrc
@@ -94,18 +90,19 @@ Vagrant.configure(2) do |config|
     sudo locale-gen en_CA.UTF-8
 
     echo "Add plugins to zsh..."
-    source ~/.zshrc
-    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions /home/vagrant/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     # Doesn't work unfortunately, not sure why. 
-    # However, we can run the command after sshing into the box
-    perl -0777 -i.original -pe 's/^plugins=\(\n\s*git\n\)/plugins=\(git z zsh-autosuggestions zsh-syntax-highlighting\)/igsm' ~/.zshrc
-
+    # However, we can run the following command after sshing into the box
 
     cd /vagrant
 
     echo "Installing Node dependencies..."
     npm install -g webpack
     # npm install
+
+    echo "Launching Zsh..."
+    sudo chsh -s /bin/zsh vagrant
+    zsh
   SHELL
 end
