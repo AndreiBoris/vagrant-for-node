@@ -94,6 +94,8 @@ Vagrant.configure(2) do |config|
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     # Doesn't work unfortunately, not sure why. 
     # However, we can run the following command after sshing into the box
+    cp /vagrant/environment/.zshrc ~/.zshrc
+    cp /vagrant/environment/.vimrc ~/.vimrc
 
     cd /vagrant
 
