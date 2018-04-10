@@ -90,8 +90,15 @@ Vagrant.configure(2) do |config|
     sudo locale-gen en_CA.UTF-8
 
     echo "Add plugins to zsh..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions /home/vagrant/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    path_to_zsh_autosuggestions_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    path_to_zsh_syntax_highlighting_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    if ! [ -d "$path_to_zsh_autosuggestions_directory" ]; then 
+      git clone https://github.com/zsh-users/zsh-autosuggestions $path_to_zsh_autosuggestions_directory
+    fi 
+    if ! [ -d "$path_to_zsh_syntax_highlighting_directory" ]; then 
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $path_to_zsh_syntax_highlighting_directory
+    fi 
+    
     # Doesn't work unfortunately, not sure why. 
     # However, we can run the following command after sshing into the box
     cp /vagrant/environment/.zshrc ~/.zshrc
@@ -99,8 +106,16 @@ Vagrant.configure(2) do |config|
 
     cd /vagrant
 
-    echo "Installing Node dependencies..."
-    npm install -g webpack
+    echo "Installing Yarn..."
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    sudo apt-get update && sudo apt-get install yarn
+
+    echo "Creating symlink to allow programs to use node command instead of nodejs"
+    symbolic_link_to_make="/usr/bin/node"
+    if ! [ -L "$symbolic_link_to_make" ]; then 
+      sudo ln -s /usr/bin/nodejs "$symbolic_link_to_make"
+    fi 
     # npm install
 
     echo "Launching Zsh..."
