@@ -123,5 +123,15 @@ Vagrant.configure(2) do |config|
     echo "Launching Zsh..."
     sudo chsh -s /bin/zsh vagrant
     zsh
+
+    echo "Install tree command..."
+    if ! [ -x "$(command -v tree)" ]; then
+      cd ~
+      wget http://mama.indstate.edu/users/ice/tree/src/tree-1.7.0.tgz
+      tar -xvzf tree-1.7.0.tgz
+      cd tree-1.7.0
+      sudo make
+      sudo make install
+    fi
   SHELL
 end
