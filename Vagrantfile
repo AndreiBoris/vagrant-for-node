@@ -73,8 +73,7 @@ Vagrant.configure(2) do |config|
 
     if ! [ -x "$(command -v git)" ]; then
       echo "=================== Install git..."
-      curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-      sudo apt-get install -y nodejs
+      sudo apt-get install git -y > /dev/null 
     else 
       echo "=================== git already installed..."
     fi
@@ -96,26 +95,22 @@ Vagrant.configure(2) do |config|
     fi
     
 
-    if ! [ -f ~/.zshrc ]; then
-      echo "=================== Installing Oh My Zsh..."
-      sudo apt-get install -y zsh
-      wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh 
+    
+    echo "=================== Installing Oh My Zsh..."
+    sudo apt-get install -y zsh
+    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
-      echo "=================== Changing default Oh My Zsh theme to new theme..."
-      sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="flazz"/g' ~/.zshrc
+    echo "=================== Changing default Oh My Zsh theme to new theme..."
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="flazz"/g' ~/.zshrc
 
-      echo "=================== Add plugins to zsh..."
-      path_to_zsh_autosuggestions_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-      path_to_zsh_syntax_highlighting_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-      if ! [ -d "$path_to_zsh_autosuggestions_directory" ]; then 
-        git clone https://github.com/zsh-users/zsh-autosuggestions $path_to_zsh_autosuggestions_directory
-      fi 
-      if ! [ -d "$path_to_zsh_syntax_highlighting_directory" ]; then 
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $path_to_zsh_syntax_highlighting_directory
-      fi 
-
-    else 
-      echo '=================== ~/.zshrc file found, assuming Oh My Zsh is already installed...'
+    echo "=================== Add plugins to zsh..."
+    path_to_zsh_autosuggestions_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    path_to_zsh_syntax_highlighting_directory="/home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    if ! [ -d "$path_to_zsh_autosuggestions_directory" ]; then 
+      git clone https://github.com/zsh-users/zsh-autosuggestions $path_to_zsh_autosuggestions_directory
+    fi 
+    if ! [ -d "$path_to_zsh_syntax_highlighting_directory" ]; then 
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $path_to_zsh_syntax_highlighting_directory
     fi 
     
 
