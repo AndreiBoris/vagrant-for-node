@@ -72,6 +72,41 @@ function t() {
   tree -I '.git|node_modules|bower_components|.DS_Store' --dirsfirst --filelimit 15 -L ${1:-3} -aC $2
 }
 
+function setUpEslint() {
+  echo "Setting up eslint in this directory..."
+  
+  if [ -f .eslintrc ]; then
+    echo ".eslintrc file already exists in this directory, delete it and rerun this script."
+    return 1
+  fi
+
+  cp /vagrant/environment/.eslintrc ./.eslintrc
+
+  while getopts ':c' flag; do
+    case "${flag}" in
+      c) 
+      echo "Coping the .eslintrc file without working with npm packages. This option assumes that those are already installed."
+      return 0
+      ;;
+    esac
+  done
+
+  if ! [ -f package.json ]; then
+    echo "package.json file does not exist in this directory, please run npm init and rerun this script."
+    return 1
+  fi
+
+  if ! [ -x "$(command -v yarn)" ]; then
+    echo "yarn command not installed, please install it and then rerun this script."
+    return 1
+  fi
+  
+  echo "Installing the eslint packages required for proper linting..."
+  yarn add eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react
+
+  echo "Eslinting installed into the directory. Happy coding!"
+  
+}
 
 # Add NPM installed packages to path
 PATH=$HOME/.node/bin:$PATH
