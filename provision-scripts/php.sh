@@ -14,7 +14,7 @@ echo "=================== Installing dependencies for running composer install"
 sudo apt-get install -y zip unzip
 
 echo "=================== Installing php7 packages..."
-sudo apt-get install -y php7.2-mbstring php7.2-xml php7.2-curl php7.2-bcmath php7.2-soap php7.2-gd php7.2-zip
+sudo apt-get install -y php7.2-mysql php7.2-mbstring php7.2-xml php7.2-curl php7.2-bcmath php7.2-soap php7.2-gd php7.2-zip
 
 echo "=================== Install composer..."
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
